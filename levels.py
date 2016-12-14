@@ -1,0 +1,5 @@
+pygame.draw.line(gameDisplay, black, (50, 50), (50, height - 50), 10)
+    pygame.draw.line(gameDisplay, black, (int(width/2) - 25,height - 50), (50, height - 50), 10)
+    pygame.draw.line(gameDisplay, black, (int(width/2) + 25, height - 50), (width - 50, height - 50), 10)
+    pygame.draw.line(gameDisplay, black, (50, 50), (width - 50, 50), 10)
+    pygame.draw.line(gameDisplay, black, (width - 50, 50), (width - 50, height - 50), 10)
