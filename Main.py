@@ -11,14 +11,13 @@ red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
 
-
-
 pygame.display.set_caption("Spooky Scary Slytherins")
 
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 30
 
 link = pygame.image.load("link.png")
+head = pygame.image.load("head.png")
 linkwidth = 40
 linkheight = 25
 
@@ -28,7 +27,21 @@ xmove = 0
 ymove = 0
 movespeed = 8
 
+snake = 20
+headsBeen = []
+time = 0
+for i in range(4):
+    headsBeen.append((x,y))
 
+def drawSnake(x, y):
+    gameDisplay.blit(head, (x, y))
+    for part in range(snake):
+        gameDisplay.blit(link, headsBeen[max(time-part*4, 0)])
+
+left = [pygame.K_LEFT, pygame.K_a]
+right = [pygame.K_RIGHT, pygame.K_d]
+up = [pygame.K_UP, pygame.K_w]
+down = [pygame.K_DOWN, pygame.K_s]
 
 exit = False
 while not exit:
@@ -36,16 +49,16 @@ while not exit:
         if event.type == pygame.QUIT:
             exit = True
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key in left:
                 xmove = -movespeed
                 ymove = 0
-            if event.key == pygame.K_RIGHT:
+            if event.key in right:
                 xmove = movespeed
                 ymove = 0
-            if event.key == pygame.K_UP:
+            if event.key in up:
                 ymove = -movespeed
                 xmove = 0
-            if event.key == pygame.K_DOWN:
+            if event.key in down:
                 ymove = movespeed
                 xmove = 0
     x = x + xmove
@@ -63,8 +76,11 @@ while not exit:
         y = height - linkheight
         ymove = 0
     gameDisplay.fill(white)
-    gameDisplay.blit(link, (x, y))
+    headsBeen.append((x, y))
+    drawSnake(x, y)
     pygame.display.update()
+    time += 1
     clock.tick(FPS)
 pygame.quit()
 quit()
+
