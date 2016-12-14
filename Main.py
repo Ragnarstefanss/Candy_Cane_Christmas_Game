@@ -1,4 +1,5 @@
 import pygame
+import Menu
 
 pygame.init()
 
@@ -14,7 +15,7 @@ blue = (0,0,255)
 pygame.display.set_caption("Spooky Scary Slytherins")
 
 clock = pygame.time.Clock()
-FPS = 30
+FPS = 60
 
 levels = []
 levels.append([((50, 50), (50, height - 50), 10),
@@ -32,40 +33,25 @@ y = height/2
 xmove = 0
 ymove = 0
 movespeed = 8
-snake = 20
+snakeLength = 8
+snakeElasticity = 3
 headsBeen = []
 time = 0
-snakeElasticity = 4
 for i in range(snakeElasticity):
     headsBeen.append((x,y))
 
-def Menu():
-    menu = True
-    while menu:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                menu = False
-        gameDisplay.fill(white)
-        font = pygame.font.Font("freesansbold.ttf", 67)
-        text = font.render("Spooky Scary Slitherins", 1, black)
-        gameDisplay.blit(text, (width/2 - 400, height/2 - 120))
-        pygame.draw.rect(gameDisplay, green, (width/2 - 50, height/2 +60, 100, 60))
-        pygame.display.update()
-        clock.tick(FPS)
-
 def drawSnake(x, y):
     gameDisplay.blit(head, (x, y))
-    #pygame.draw.circle(gameDisplay, green, (int(x), int(y)), 10)
-    for part in range(snake):
-        #pygame.draw.circle(gameDisplay, black, headsBeen[int(max(time-part*4, 0))], 10)
+    for part in range(snakeLength):
         gameDisplay.blit(link, headsBeen[max(time-part*snakeElasticity, 0)])
 
+#Control scheme set to arrow keys and WASD
 left = [pygame.K_LEFT, pygame.K_a]
 right = [pygame.K_RIGHT, pygame.K_d]
 up = [pygame.K_UP, pygame.K_w]
 down = [pygame.K_DOWN, pygame.K_s]
 
-Menu()
+Menu.Menu()
 level = levels[0]
 exit = False
 while not exit:
@@ -106,7 +92,7 @@ while not exit:
     drawSnake(x, y)
     pygame.display.update()
     time += 1
-    clock.tick(5)
+    clock.tick(FPS)
 pygame.quit()
 quit()
 
