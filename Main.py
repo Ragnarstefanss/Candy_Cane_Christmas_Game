@@ -19,10 +19,10 @@ FPS = 60
 
 levels = []
 levels.append([((50, 50), (50, height - 50), 10),
-               ((int(width/2) - 25,height - 50), (50, height - 50), 10),
+               ((50, height - 50),(int(width/2) - 25,height - 50), 10),
                ((int(width/2) + 25, height - 50), (width - 50, height - 50), 10),
-                ((50, 50), (width - 50, 50), 10),
-                ((width - 50, 50), (width - 50, height - 50), 10)])
+               ((50, 50), (width - 50, 50), 10),
+               ((width - 50, 50), (width - 50, height - 50), 10)])
 
 link = pygame.image.load("link.png")
 head = pygame.image.load("head.png")
@@ -32,13 +32,21 @@ x = width/2
 y = height/2
 xmove = 0
 ymove = 0
-movespeed = 8
+movespeed = 10
 snakeLength = 8
 snakeElasticity = 3
 headsBeen = []
 time = 0
 for i in range(snakeElasticity):
     headsBeen.append((x,y))
+
+def wallDetector(level, coords):
+    print(coords[1])
+    for wall in level:
+        if (wall[0][0] - 5 <= coords[0] <= wall[1][0] + 5) and (wall[0][1] - 5 <= coords[1] <= wall[1][1] + 5):
+            print("CRASH!")
+            return True
+    return False
 
 def drawSnake(x, y):
     gameDisplay.blit(head, (x, y))
@@ -88,6 +96,9 @@ while not exit:
     gameDisplay.fill(white)
     for wall in level:
         pygame.draw.line(gameDisplay, black, wall[0], wall[1], wall[2])
+    if wallDetector(level, (x,y)):
+        xmove = 0
+        ymove = 0
     headsBeen.append((x, y))
     drawSnake(x, y)
     pygame.display.update()
