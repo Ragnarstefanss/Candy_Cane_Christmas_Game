@@ -1,5 +1,6 @@
 import pygame
 import Menu
+import random
 
 pygame.init()
 
@@ -49,18 +50,21 @@ for i in range(snakeElasticity):
 
 def wallDetector(level, coords):
     for wall in level:
+        #rint(coords[1])
         if (wall[0][0] - 5 <= coords[0] <= wall[1][0] + 5) and (wall[0][1] - 5 <= coords[1] <= wall[1][1] + 5):
             print("CRASH!")
             return True
     return False
 
-def drawApple(x, y):
-    gameDisplay.blit(apple, (0,5))
+def drawApple(random1, random2):
+    gameDisplay.blit(apple, (random1,random2))
 
 def drawSnake(x, y):
     gameDisplay.blit(head, (x, y))
     for part in range(snakeLength):
         gameDisplay.blit(link, headsBeen[max(time-part*snakeElasticity, 0)])
+
+
 
 #Control scheme set to arrow keys and WASD
 left = [pygame.K_LEFT, pygame.K_a]
@@ -71,6 +75,10 @@ down = [pygame.K_DOWN, pygame.K_s]
 #Menu.Menu()
 level = levels[0]
 exit = False
+
+
+rand1 = random.randint(0,560)
+rand2 = random.randint(0,560)
 
 while not exit:
     for event in pygame.event.get():
@@ -115,7 +123,7 @@ while not exit:
         ymove = 0
         
     headsBeen.append((x, y))
-    drawApple(x,y)
+    drawApple(rand1, rand2)
     drawSnake(x, y)
     pygame.display.update()
     time += 1
