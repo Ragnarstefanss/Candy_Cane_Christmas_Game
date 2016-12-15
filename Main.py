@@ -3,6 +3,7 @@ import Menu
 
 pygame.init()
 
+# búa til leik
 width = 800
 height = 600
 gameDisplay = pygame.display.set_mode((width, height))
@@ -11,12 +12,11 @@ white = (255,255,255)
 red = (255,0,0)
 green = (0,255,0)
 blue = (0,0,255)
-
 pygame.display.set_caption("Spooky Scary Slytherins")
-
 clock = pygame.time.Clock()
 FPS = 60
 
+# afmarkað svæði
 levels = []
 levels.append([((50, 50), (50, height - 50), 10),
                ((50, height - 50),(int(width/2) - 25,height - 50), 10),
@@ -24,8 +24,12 @@ levels.append([((50, 50), (50, height - 50), 10),
                ((50, 50), (width - 50, 50), 10),
                ((width - 50, 50), (width - 50, height - 50), 10)])
 
+# búa til snák
 link = pygame.image.load("link.png")
 head = pygame.image.load("head.png")
+apple = pygame.image.load("apple.png")
+apple = pygame.transform.scale(apple, (30,30))
+                          
 linkwidth = 40
 linkheight = 25
 x = width/2
@@ -37,16 +41,21 @@ snakeLength = 8
 snakeElasticity = 3
 headsBeen = []
 time = 0
+
+
+
 for i in range(snakeElasticity):
     headsBeen.append((x,y))
 
 def wallDetector(level, coords):
-    print(coords[1])
     for wall in level:
         if (wall[0][0] - 5 <= coords[0] <= wall[1][0] + 5) and (wall[0][1] - 5 <= coords[1] <= wall[1][1] + 5):
             print("CRASH!")
             return True
     return False
+
+def drawApple(x, y):
+    gameDisplay.blit(apple, (0,5))
 
 def drawSnake(x, y):
     gameDisplay.blit(head, (x, y))
@@ -59,9 +68,10 @@ right = [pygame.K_RIGHT, pygame.K_d]
 up = [pygame.K_UP, pygame.K_w]
 down = [pygame.K_DOWN, pygame.K_s]
 
-Menu.Menu()
+#Menu.Menu()
 level = levels[0]
 exit = False
+
 while not exit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -79,6 +89,7 @@ while not exit:
             if event.key in down:
                 ymove = movespeed
                 xmove = 0
+                
     x = x + xmove
     y = y + ymove
     if x < 0:
@@ -93,17 +104,25 @@ while not exit:
     if y > height - linkheight:
         y = height - linkheight
         ymove = 0
+        
     gameDisplay.fill(white)
+    
     for wall in level:
         pygame.draw.line(gameDisplay, black, wall[0], wall[1], wall[2])
+        
     if wallDetector(level, (x,y)):
         xmove = 0
         ymove = 0
+        
     headsBeen.append((x, y))
+    drawApple(x,y)
     drawSnake(x, y)
     pygame.display.update()
     time += 1
     clock.tick(FPS)
+
+
+    
 pygame.quit()
 quit()
 
