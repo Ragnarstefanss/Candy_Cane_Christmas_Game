@@ -15,7 +15,7 @@ green = (0,255,0)
 blue = (0,0,255)
 pygame.display.set_caption("Spooky Scary Slytherins")
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 30
 
 # afmarkað svæði
 levels = []
@@ -29,7 +29,8 @@ levels.append([((50, 50), (50, height - 50), 10),
 link = pygame.image.load("link.png")
 head = pygame.image.load("head.png")
 apple = pygame.image.load("apple.png")
-apple = pygame.transform.scale(apple, (30,30))
+apple_size = 30
+apple = pygame.transform.scale(apple, (apple_size,apple_size))
                           
 linkwidth = 40
 linkheight = 25
@@ -42,8 +43,10 @@ snakeLength = 8
 snakeElasticity = 3
 headsBeen = []
 time = 0
+points = 0
 
-
+rand1 = round(random.randrange(0,width-apple_size))
+rand2 = round(random.randint(0,height-apple_size))
 
 for i in range(snakeElasticity):
     headsBeen.append((x,y))
@@ -56,14 +59,27 @@ def wallDetector(level, coords):
             return True
     return False
 
+def changeApple():
+    rand1 = round(random.randrange(0,width-apple_size))
+    rand2 = round(random.randint(0,height-apple_size))
+    return (rand1, rand2)
+
 def drawApple(random1, random2):
-    gameDisplay.blit(apple, (random1,random2))
+    gameDisplay.blit(apple, (400.0,300.0))
 
 def drawSnake(x, y):
     gameDisplay.blit(head, (x, y))
     for part in range(snakeLength):
         gameDisplay.blit(link, headsBeen[max(time-part*snakeElasticity, 0)])
 
+def checkEat(level, snake, apple):
+    if snake == apple:
+        points += 105
+        rect = rect.move((rand1, rand2))
+        drawSnake(rand1, rand2)
+        print(points)
+        return True
+    return False
 
 
 #Control scheme set to arrow keys and WASD
@@ -75,11 +91,7 @@ down = [pygame.K_DOWN, pygame.K_s]
 #Menu.Menu()
 level = levels[0]
 exit = False
-
-
-rand1 = random.randint(0,560)
-rand2 = random.randint(0,560)
-
+    
 while not exit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -121,9 +133,13 @@ while not exit:
     if wallDetector(level, (x,y)):
         xmove = 0
         ymove = 0
+
+    if checkEat(level, (x,y), (rand1, rand2)):
+        print('apple was eaten')
         
     headsBeen.append((x, y))
     drawApple(rand1, rand2)
+    
     drawSnake(x, y)
     pygame.display.update()
     time += 1
