@@ -4,7 +4,7 @@ import pygame
 pygame.init()
 pygame.font.init()
 
-play_song=False
+play_song = False
 change = False
 notquit = True
 running = True
@@ -32,11 +32,8 @@ pygame.display.set_caption("Will Ferrell get's the candy cane!!")
 screen = pygame.display.set_mode((1280, 960))
 
 clock = pygame.time.Clock()
-walls = [] # List to hold the walls
+walls = []
 snows = []
-
-label = score_font.render("You Lose", 1, red)
-label2 = score_font.render("You Won The Game", 1, red)
 
 
 class Player(object):
@@ -45,17 +42,16 @@ class Player(object):
         self.spawn()
 
     def move(self, dx, dy):
-        # Move each axis separately. Note that this checks for collisions both times.
         if dx != 0:
             self.move_single_axis(dx, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
+            
     def spawn(self):
         self.rect.x = random.randint(2, 38)*32
         self.rect.y = random.randint(2, 28)*32
 
     def move_single_axis(self, dx, dy):
-        # Move the rectangle
         self.rect.x += dx
         self.rect.y += dy
 
@@ -75,6 +71,7 @@ class Candy(object):
     def __init__(self):
         self.rect = pygame.Rect(320, 320, 32, 32)
         self.move()
+        
     def move(self):
         self.rect.x = random.randint(2, 38)*32
         self.rect.y = random.randint(2, 28)*32
@@ -83,13 +80,13 @@ class Snow(object):
     def __init__(self):
         self.rect = pygame.Rect(random.randint(0, 1280), random.randint(0,960),0,0)
         self.move()
+        
     def move(self):
         self.rect.y += random.randint(0, 4)
         if self.rect.y > 960:
             self.rect.y = 0
 
 class Wall(object):
-
     def __init__(self, pos):
             self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
             
@@ -133,7 +130,7 @@ def lose_screen(count_p1, count_p2):
 
 def main():
     
-    global change,label,screen,walls,won,notquit,d_p,u_p,l_p,r_p,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows
+    global change,screen,walls,won,notquit,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows
     
     if not play_song:
         music()
@@ -178,7 +175,6 @@ def main():
     "W                              WWWWWWWWW",
     "W                              WWWWWWWWW",
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
-
     ]
     
     x = y = 0
@@ -210,12 +206,10 @@ def main():
                 running = False
                 won = False
                 notquit = False
-                screen.blit(label, (100, 100))
             if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 running = False
                 not_quit = False
                 won = False
-                screen.blit(label, (100, 100))
             if e.type == pygame.KEYDOWN and e.key == pygame.K_q:
                 notquit = False
                 return 0
@@ -275,20 +269,14 @@ def main():
             not_quit = False
             won = False
 
-    screen.blit(label, (100, 100))
+
     running = True
-    play_death = True
     play_song=True
 
     while running and notquit:
-        timer = 30
-        play_song = False
-        if play_death:
-            pygame.mixer.music.load('songs/snake_dies.ogg')
-            pygame.mixer.music.play(1)
-            play_death = False
+        timer = 120
         lose_screen(count_p1,count_p2)
-    pygame.mixer.music.stop()
+        
 while notquit:
     main()
 
