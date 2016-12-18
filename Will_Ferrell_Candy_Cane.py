@@ -121,7 +121,14 @@ def changeName(i):
                 else:
                     p2name = name
             elif e.type == pygame.KEYDOWN:
-                name = name + pygame.key.name(e.key)
+                if e.key == 303 or e.key == 304:
+                    continue
+                elif (pygame.key.get_pressed()[303] != 0) or (pygame.key.get_pressed()[304] != 0):
+                    name = name + str.upper(pygame.key.name(e.key))
+                elif (pygame.key.get_pressed()[32] != 0):
+                    name = name + " "
+                else:
+                    name = name + pygame.key.name(e.key)
 
 def start_screen():
     global running, notquit, won, screen
