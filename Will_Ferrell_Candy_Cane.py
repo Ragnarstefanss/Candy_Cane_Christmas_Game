@@ -6,13 +6,14 @@ pygame.font.init()
 
 play_song=False
 change = False
-timer = 120
-frame_count = 0
 notquit = True
 running = True
+won = True
+timer = 120
+frame_count = 0
 
-countp1 = 0
-countp2 = 0
+count_p1 = 0
+count_p2 = 0
 
 myndGameOver = pygame.image.load('images/gameover.jpg')
 myndWall = pygame.image.load('images/wall+santa.png')
@@ -20,29 +21,25 @@ myndCandy = pygame.image.load('images/candy.png')
 myndFrame = pygame.image.load('images/frame.jpg')
 myndSnow = pygame.image.load('images/snowflake.png')
 myndStart = pygame.image.load('images/start_screen.jpg')
-red = (255, 0, 0)
-myfont = pygame.font.Font( None,32)
-label = myfont.render("You Lose", 1, red)
-label2 = myfont.render("You Won The Game", 1, red)
-
 elfMynd = pygame.image.load('images/elf.png')
 
-# Initialize
+red = (255, 0, 0)
+score_font = pygame.font.Font( None, 32)
+
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
-
-# Set up the display
 pygame.display.set_caption("Will Ferrell get's the candy cane!!")
 screen = pygame.display.set_mode((1280, 960))
 
 clock = pygame.time.Clock()
 walls = [] # List to hold the walls
 snows = []
-won = True
+
+label = score_font.render("You Lose", 1, red)
+label2 = score_font.render("You Won The Game", 1, red)
 
 
 class Player(object):
-
     def __init__(self):
         self.rect = pygame.Rect(random.randint(1, 39)*32, random.randint(1,49)*32,32,32)
         self.spawn()
@@ -74,7 +71,6 @@ class Player(object):
                 if dy < 0: # Moving up; Hit the bottom side of the wall
                     self.rect.top = wall.rect.bottom
 
-
 class Candy(object):
     def __init__(self):
         self.rect = pygame.Rect(320, 320, 32, 32)
@@ -92,36 +88,14 @@ class Snow(object):
         if self.rect.y > 960:
             self.rect.y = 0
 
-
 class Wall(object):
 
     def __init__(self, pos):
             self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
-
-#Föll
-
-def music(): 
-    #Tónlise
+            
+def music():
     pygame.mixer.music.load('songs/jol.ogg')
     pygame.mixer.music.play(-1)
-
-def lose_screen(countp1, countp2):
-    global running, notquit, won, screen
-    a = Wall((230,200))
-    screen.fill((0, 0, 0))
-    screen.blit(myndGameOver,a.rect)
-    screen.blit(myfont.render("Will: %s" % countp1 , 1, red),(640,500))
-    screen.blit(myfont.render("Ferrell: %s" % countp2 , 1, red),(640,600))
-    pygame.display.flip()
-    for e in pygame.event.get():
-        if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_q:
-            running = False
-            notquit = False
-            won = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
-            running = False
-            won = False
-
 
 def start_screen():
     global running, notquit, won, screen
@@ -139,23 +113,40 @@ def start_screen():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
                 won = False
                 running = True
+                
+def lose_screen(count_p1, count_p2):
+    global running, notquit, won, screen
+    a = Wall((230,200))
+    screen.fill((0, 0, 0))
+    screen.blit(myndGameOver,a.rect)
+    screen.blit(score_font.render("Will: %s" % count_p1 , 1, red),(640,500))
+    screen.blit(score_font.render("Ferrell: %s" % count_p2 , 1, red),(640,600))
+    pygame.display.flip()
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_q:
+            running = False
+            notquit = False
+            won = False
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+            running = False
+            won = False
 
-            
 def main():
     
-    global change,label,screen,walls,won,notquit,d_p,u_p,l_p,r_p,lose,running, countp1, countp2, play_song, timer, frame_count, snows
+    global change,label,screen,walls,won,notquit,d_p,u_p,l_p,r_p,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows
     
     if not play_song:
         music()
-        play_song = True 
+        play_song = True
+        
     start_screen()
+    
     won = True
     change = False
 
-    player = Player() # Create the player
+    player = Player()
     player2 = Player()
 
-    # Holds the level layout in a list of strings.
     level = [
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
     "W                                      W",
@@ -177,11 +168,11 @@ def main():
     "W                            W   W     W",
     "W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W",
     "W                                      W",#20
-    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W",
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W W W",
     "W W                                W W W",
-    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W",
+    "W W WWWWWWWWWWWWWWWWW WWWWWWWWWWWW W W W",
     "W W                              W W W W",
-    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W",#25
+    "W W WWWWWWWWWW WWWWWWWWWWWWWWWWWWW W W W",#25
     "W                              WWWWWWWWW",
     "W                              WWWWWWWWW",
     "W                              WWWWWWWWW",
@@ -189,10 +180,10 @@ def main():
     "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
 
     ]
-    # Parse the level string above. W = wall
+    
     x = y = 0
-    countp1 = 0
-    countp2 = 0
+    count_p1 = 0
+    count_p2 = 0
     snows = []
     for i in range(0,1000):
         snows.append(Snow())
@@ -252,11 +243,12 @@ def main():
             player2.move(0, speed)
 
         if player.rect.colliderect(candy_rect):
-            countp1 += 1
+            count_p1 += 1
             candy_rect.move()
         if player2.rect.colliderect(candy_rect):
-            countp2 += 1
+            count_p2 += 1
             candy_rect.move()
+            
         # Draw the scene
         screen.fill((0, 0, 0))
         for wall in walls:
@@ -274,9 +266,9 @@ def main():
         screen.blit(elfMynd, player2.rect)
         screen.blit(myndCandy, candy_rect)
         screen.blit(myndFrame, (995,803))
-        screen.blit(myfont.render("Will: %s" % countp1 , 1, red),(1100,830))
-        screen.blit(myfont.render("Ferrell: %s" % countp2 , 1, red),(1100,870))
-        screen.blit(myfont.render("T: %s" % timer , 1, red),(1100,910))
+        screen.blit(score_font.render("Will: %s" % count_p1 , 1, red),(1100,830))
+        screen.blit(score_font.render("Ferrell: %s" % count_p2 , 1, red),(1100,870))
+        screen.blit(score_font.render("T: %s" % timer , 1, red),(1100,910))
         pygame.display.flip()
         if timer == 0:
             running = False
@@ -295,7 +287,7 @@ def main():
             pygame.mixer.music.load('songs/snake_dies.ogg')
             pygame.mixer.music.play(1)
             play_death = False
-        lose_screen(countp1,countp2)
+        lose_screen(count_p1,count_p2)
     pygame.mixer.music.stop()
 while notquit:
     main()
