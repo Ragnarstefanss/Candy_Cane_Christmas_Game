@@ -31,8 +31,9 @@ pauseMynd = pygame.image.load('images/pause/pause_screen.jpg')
 
 
 red = (255, 0, 0)
+green = (0, 255, 135)
 score_font = pygame.font.Font( None, 32)
-
+result_font = pygame.font.Font( None, 72)
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
 pygame.display.set_caption("Will Ferrell gets the candy cane!!")
@@ -213,8 +214,8 @@ def changeName(i):
         name = p2name
     while changing:
         screen.fill((0, 0, 0))
-        screen.blit(myndFrame, (0, 0))
-        screen.blit(score_font.render(name, 1, red), (80, 60))
+        screen.blit(myndFrame, (550, 425))
+        screen.blit(score_font.render(name, 1, red), (610,500))
         pygame.display.update()
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
@@ -263,8 +264,12 @@ def lose_screen(count_p1, count_p2):
     global running, notquit, screen
     screen.fill((0, 0, 0))
     screen.blit(myndGameOver,(0,0))
-    screen.blit(score_font.render(p1name + ": " + str(count_p1) , 1, red),(640,500))
-    screen.blit(score_font.render(p2name + ": " +  str(count_p2) , 1, red),(640,600))
+    if count_p1 > count_p2:
+        screen.blit(result_font.render("Winner " + p1name + " : " + str(count_p1) , 1, green),(500,500))
+    elif count_p2 > count_p1:
+        screen.blit(result_font.render("Winner " + p2name + " : " + str(count_p2) , 1, green),(500,500))
+    else:
+        screen.blit(result_font.render("Tie" , 1, green),(600,500))
     pygame.display.flip()
     for e in pygame.event.get():
         if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
