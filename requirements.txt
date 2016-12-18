@@ -1,4 +1,3 @@
 pygame==1.9.3.dev0
-#Above is the output of pip3 freeze
-#However, if you cannot run the program because of a music format related issue, 
-# please install libvorbis to play .ogg files
+#Above is the output of pip freeze
+#However, to play a .ogg audio file, you may also need libvorbis
