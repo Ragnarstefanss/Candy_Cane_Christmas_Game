@@ -14,18 +14,18 @@ running = True
 countp1 = 0
 countp2 = 0
 
-myndGameOver = pygame.image.load('gameover.jpg')
-myndWall = pygame.image.load('wall+santa.png')
-myndCandy = pygame.image.load('candy.png')
-myndFrame = pygame.image.load('frame.jpg')
-myndSnow = pygame.image.load('snowflake.png')
-myndStart = pygame.image.load('start_screen.jpg')
+myndGameOver = pygame.image.load('images/gameover.jpg')
+myndWall = pygame.image.load('images/wall+santa.png')
+myndCandy = pygame.image.load('images/candy.png')
+myndFrame = pygame.image.load('images/frame.jpg')
+myndSnow = pygame.image.load('images/snowflake.png')
+myndStart = pygame.image.load('images/start_screen.jpg')
 red = (255, 0, 0)
 myfont = pygame.font.Font( None,32)
 label = myfont.render("You Lose", 1, red)
 label2 = myfont.render("You Won The Game", 1, red)
 
-elfMynd = pygame.image.load('elf.png')
+elfMynd = pygame.image.load('images/elf.png')
 
 # Initialize
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -102,7 +102,7 @@ class Wall(object):
 
 def music(): 
     #Tónlise
-    pygame.mixer.music.load('jol.ogg')
+    pygame.mixer.music.load('songs/jol.ogg')
     pygame.mixer.music.play(-1)
 
 def lose_screen(countp1, countp2):
@@ -292,7 +292,7 @@ def main():
         timer = 30
         play_song = False
         if play_death:
-            pygame.mixer.music.load('snake_dies.ogg')
+            pygame.mixer.music.load('songs/snake_dies.ogg')
             pygame.mixer.music.play(1)
             play_death = False
         lose_screen(countp1,countp2)
