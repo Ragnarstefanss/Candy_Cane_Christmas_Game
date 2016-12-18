@@ -28,15 +28,17 @@ score_font = pygame.font.Font( None, 32)
 
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
-pygame.display.set_caption("Will Ferrell get's the candy cane!!")
-screen = pygame.display.set_mode((1280, 960))
+pygame.display.set_caption("Will Ferrell gets the candy cane!!")
+screen = pygame.display.set_mode((1280, 960), pygame.RESIZABLE)
 
 clock = pygame.time.Clock()
 walls = []
 snows = []
-
+p1name = "Will"
+p2name = "Ferrell"
 
 class Player(object):
+    name = ""
     def __init__(self):
         self.rect = pygame.Rect(random.randint(1, 39)*32, random.randint(1,49)*32,32,32)
         self.spawn()
@@ -89,10 +91,37 @@ class Snow(object):
 class Wall(object):
     def __init__(self, pos):
             self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
-            
+
 def music():
     pygame.mixer.music.load('songs/jol.ogg')
     pygame.mixer.music.play(-1)
+
+def changeName(i):
+    changing = True
+    global p1name, p2name
+    if i == 1:
+        name = p1name
+    else:
+        name = p2name
+    while changing:
+        screen.fill((0, 0, 0))
+        screen.blit(myndFrame, (0, 0))
+        screen.blit(score_font.render(name, 1, red), (80, 60))
+        pygame.display.update()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_BACKSPACE:
+                name = name[:-1]
+            elif e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
+                changing = False
+                if i == 1:
+                    p1name = name
+                else:
+                    p2name = name
+            elif e.type == pygame.KEYDOWN:
+                name = name + pygame.key.name(e.key)
 
 def start_screen():
     global running, notquit, won, screen
@@ -110,14 +139,20 @@ def start_screen():
             if e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
                 won = False
                 running = True
+            if e.type == pygame.KEYDOWN and (e.key == pygame.K_1 or e.key == pygame.K_2):
+                if e.key == pygame.K_1:
+                    changeName(1)
+                else:
+                    changeName(2)
+
                 
 def lose_screen(count_p1, count_p2):
     global running, notquit, won, screen
     a = Wall((230,200))
     screen.fill((0, 0, 0))
     screen.blit(myndGameOver,a.rect)
-    screen.blit(score_font.render("Will: %s" % count_p1 , 1, red),(640,500))
-    screen.blit(score_font.render("Ferrell: %s" % count_p2 , 1, red),(640,600))
+    screen.blit(score_font.render(p1name + ": " + str(count_p1) , 1, red),(640,500))
+    screen.blit(score_font.render(p2name + ": " +  str(count_p2) , 1, red),(640,600))
     pygame.display.flip()
     for e in pygame.event.get():
         if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_q:
@@ -260,8 +295,8 @@ def main():
         screen.blit(elfMynd, player2.rect)
         screen.blit(myndCandy, candy_rect)
         screen.blit(myndFrame, (995,803))
-        screen.blit(score_font.render("Will: %s" % count_p1 , 1, red),(1100,830))
-        screen.blit(score_font.render("Ferrell: %s" % count_p2 , 1, red),(1100,870))
+        screen.blit(score_font.render(p1name + ": " +  str(count_p1) , 1, red),(1100,830))
+        screen.blit(score_font.render(p2name + ": " + str(count_p2) , 1, red),(1100,870))
         screen.blit(score_font.render("T: %s" % timer , 1, red),(1100,910))
         pygame.display.flip()
         if timer == 0:
