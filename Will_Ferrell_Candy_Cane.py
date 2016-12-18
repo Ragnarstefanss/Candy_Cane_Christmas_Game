@@ -13,6 +13,8 @@ time_over = False
 
 timer = 120
 frame_count = 0
+levels = []
+level = []
 
 count_p1 = 0
 count_p2 = 0
@@ -95,6 +97,108 @@ class Snow(object):
 class Wall(object):
     def __init__(self, pos):
             self.rect = pygame.Rect(pos[0], pos[1], 32, 32)
+
+def load_levels():
+    global levels, level
+    levels = []
+    levels.append([
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                      W",
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W",
+    "W W                                W W W",
+    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W",#5
+    "W W                              W W W W",
+    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W",
+    "W                          W W   W W W W",
+    "WWWWW WWWWWWWWWWWWWWWWWWWW W W W W W W W",
+    "W     W                  W W W W W W W W",#10
+    "W WWWWWWWWWWWWWWWWWWWWWW W     W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",#15
+    "W                            W W W W   W",
+    "W                            W W W WWW W",
+    "W                            W   W     W",
+    "W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W",
+    "W                                      W",#20
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W W W",
+    "W W                                W W W",
+    "W W WWWWWWWWWWWWWWWWW WWWWWWWWWWWW W W W",
+    "W W                              W W W W",
+    "W W WWWWWWWWWW WWWWWWWWWWWWWWWWWWW W W W",#25
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+    ])
+    levels.append([
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                      W",
+    "W                                      W",
+    "W       WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                WWWWWWW",#5
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW WWWWWWW",
+    "W                                WWWWWWW",
+    "W                                WWWWWWW",
+    "WW WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                      W",#10
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",#15
+    "W                            W W W W   W",
+    "W                            W W W WWW W",
+    "W                            W   W     W",
+    "W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                 WWWWWW",#20
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW WWWWWW",
+    "W W                               WWWWWW",
+    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W W                              WWWWWWW",
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",#25
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+    ])
+    levels.append([
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                      W",
+    "W                                      W",
+    "W       WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                WWWWWWW",#5
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW WWWWWWW",
+    "W                                WWWWWWW",
+    "W                                WWWWWWW",
+    "W                                     WW",
+    "W                                      W",#10
+    "W  WWWWWWWWWWWWWWWWWWWWWWWWWWW W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",
+    "W                            W W W W W W",#15
+    "W                            W W W W W W",
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                      W",
+    "W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                                 WWWWWW",#20
+    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W W                               WWWWWW",
+    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W W                              WWWWWWW",
+    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",#25
+    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "W                              WWWWWWWWW",
+    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
+    ])
+    level = []
+    level = levels[random.randint(0, len(levels)-1)]
 
 def music():
     pygame.mixer.music.load('songs/jol.ogg')
@@ -187,7 +291,7 @@ def pause_screen():
 
 def main():
     
-    global screen,walls,notquit,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows, pause
+    global screen,walls,notquit,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows, pause, levels
     
     if not play_song:
         music()
@@ -198,43 +302,13 @@ def main():
     player = Player()
     player2 = Player()
 
-    level = [
-    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-    "W                                      W",
-    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W",
-    "W W                                W W W",
-    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W",#5
-    "W W                              W W W W",
-    "W W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W W W",
-    "W                          W W   W W W W",
-    "WWWWW WWWWWWWWWWWWWWWWWWWW W W W W W W W",
-    "W     W                  W W W W W W W W",#10
-    "W WWWWWWWWWWWWWWWWWWWWWW W     W W W W W",
-    "W                            W W W W W W",
-    "W                            W W W W W W",
-    "W                            W W W W W W",
-    "W                            W W W W W W",#15
-    "W                            W W W W   W",
-    "W                            W W W WWW W",
-    "W                            W   W     W",
-    "W     WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW W",
-    "W                                      W",#20
-    "W WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW  W W W",
-    "W W                                W W W",
-    "W W WWWWWWWWWWWWWWWWW WWWWWWWWWWWW W W W",
-    "W W                              W W W W",
-    "W W WWWWWWWWWW WWWWWWWWWWWWWWWWWWW W W W",#25
-    "W                              WWWWWWWWW",
-    "W                              WWWWWWWWW",
-    "W                              WWWWWWWWW",
-    "W                              WWWWWWWWW",
-    "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
-    ]
-    
+    load_levels()
+
     x = y = 0
     count_p1 = 0
     count_p2 = 0
     snows = []
+    walls = []
     for i in range(0,1500):
         snows.append(Snow())
     for row in level:
