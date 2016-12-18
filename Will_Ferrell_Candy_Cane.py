@@ -5,10 +5,12 @@ pygame.init()
 pygame.font.init()
 
 play_song = False
-change = False
 notquit = True
 running = True
-won = True
+pause = False
+time_over = False
+
+
 timer = 120
 frame_count = 0
 
@@ -22,6 +24,9 @@ myndFrame = pygame.image.load('images/frame.jpg')
 myndSnow = pygame.image.load('images/snowflake.png')
 myndStart = pygame.image.load('images/start_screen.jpg')
 elfMynd = pygame.image.load('images/elf.png')
+managerMynd = pygame.image.load('images/manager.png')
+pauseMynd = pygame.image.load('images/pause/pause_screen.jpg')
+
 
 red = (255, 0, 0)
 score_font = pygame.font.Font( None, 32)
@@ -29,8 +34,7 @@ score_font = pygame.font.Font( None, 32)
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
 pygame.display.set_caption("Will Ferrell gets the candy cane!!")
-screen = pygame.display.set_mode((1280, 960), pygame.RESIZABLE)
-
+screen = pygame.display.set_mode((1280, 960),pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 walls = []
 snows = []
@@ -131,20 +135,18 @@ def changeName(i):
                     name = name + pygame.key.name(e.key)
 
 def start_screen():
-    global running, notquit, won, screen
+    global running, notquit, screen
     running = False
     while not running:
         screen.fill((0, 0, 0))
         screen.blit(myndStart,(0,0))
         pygame.display.flip()
         for e in pygame.event.get():
-            if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_q:
+            if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 running = False
                 notquit = False
-                won = False
                 return 0
             if e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
-                won = False
                 running = True
             if e.type == pygame.KEYDOWN and (e.key == pygame.K_1 or e.key == pygame.K_2):
                 if e.key == pygame.K_1:
@@ -154,25 +156,38 @@ def start_screen():
 
                 
 def lose_screen(count_p1, count_p2):
-    global running, notquit, won, screen
-    a = Wall((230,200))
+    global running, notquit, screen
     screen.fill((0, 0, 0))
-    screen.blit(myndGameOver,a.rect)
+    screen.blit(myndGameOver,(0,0))
     screen.blit(score_font.render(p1name + ": " + str(count_p1) , 1, red),(640,500))
     screen.blit(score_font.render(p2name + ": " +  str(count_p2) , 1, red),(640,600))
     pygame.display.flip()
     for e in pygame.event.get():
-        if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_q:
+        if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
             notquit = False
-            won = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+        if e.type == pygame.KEYDOWN and e.key == pygame.K_RETURN:
             running = False
-            won = False
+
+def pause_screen():
+    global running, notquit, screen
+    running = False
+    while not running:
+        screen.fill((0, 0, 0))
+        screen.blit(pauseMynd,(0,0))
+        pygame.display.flip()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT or e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
+                running = False
+                notquit = False
+                return 0
+            if e.type == pygame.KEYDOWN and e.key == pygame.K_p:
+                running = True
+
 
 def main():
     
-    global change,screen,walls,won,notquit,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows
+    global screen,walls,notquit,lose,running, count_p1, count_p2, play_song, timer, frame_count, snows, pause
     
     if not play_song:
         music()
@@ -180,9 +195,6 @@ def main():
         
     start_screen()
     
-    won = True
-    change = False
-
     player = Player()
     player2 = Player()
 
@@ -223,7 +235,7 @@ def main():
     count_p1 = 0
     count_p2 = 0
     snows = []
-    for i in range(0,1000):
+    for i in range(0,1500):
         snows.append(Snow())
     for row in level:
         for col in row:
@@ -238,23 +250,18 @@ def main():
     while running:
         
         frame_count += 1
-        if frame_count % 10 == 0:
+        if frame_count % 15 == 0:
             timer -= 1
         
-        clock.tick(10)
+        clock.tick(15)
 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 running = False
-                won = False
                 notquit = False
             if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
                 running = False
                 not_quit = False
-                won = False
-            if e.type == pygame.KEYDOWN and e.key == pygame.K_q:
-                notquit = False
-                return 0
                 
         # Move the player if an arrow key is pressed
         key = pygame.key.get_pressed()
@@ -278,6 +285,13 @@ def main():
         if key[pygame.K_s]:
             player2.move(0, speed)
 
+        if key[pygame.K_p] and not pause :
+            pause_screen()
+            pause = True
+        elif pause:
+            pause = False
+            
+
         if player.rect.colliderect(candy_rect):
             count_p1 += 1
             candy_rect.move()
@@ -299,7 +313,7 @@ def main():
             screen.blit(myndSnow,snow.rect)
             snow.move()
         screen.blit(elfMynd, player.rect)
-        screen.blit(elfMynd, player2.rect)
+        screen.blit(managerMynd, player2.rect)
         screen.blit(myndCandy, candy_rect)
         screen.blit(myndFrame, (995,803))
         screen.blit(score_font.render(p1name + ": " +  str(count_p1) , 1, red),(1100,830))
@@ -309,7 +323,6 @@ def main():
         if timer == 0:
             running = False
             not_quit = False
-            won = False
 
 
     running = True
